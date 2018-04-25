@@ -19,4 +19,19 @@ test "layout links" do
   assert_select "title", full_title("Sign up")
 end
 
+test "layout links as logged user" do
+ log_in_as(users(:michael))
+ get root_path
+ assert_select "a[href=?]", logout_path
+ assert_select "a[href=?]", users_path
+ assert_select "a[href=?]", edit_user_path(users(:michael))
+ assert_select "a[href=?]", user_path(users(:michael))
+end
+test "layout links as not logged user" do
+ get root_path
+ assert_select "a[href=?]", logout_path, count: 0
+ assert_select "a[href=?]", users_path, count: 0
+ assert_select "a[href=?]", edit_user_path(users(:michael)), count: 0
+ assert_select "a[href=?]", user_path(users(:michael)), count: 0
+end
 end
