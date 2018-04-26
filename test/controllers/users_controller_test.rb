@@ -4,6 +4,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:michael)
     @other_user = users(:david)
+    @unactivated_user = users(:unactivated_user)
   end
   test "should get new" do
     get signup_path
@@ -48,6 +49,11 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
    end
    assert_redirected_to root_path
  end
+ test "unactivated user show page" do
+   log_in_as @user
+   get user_path @unactivated_user
+   assert_redirected_to root_path
+ end
 
 test "delete as admin" do
   log_in_as(@user)
@@ -55,7 +61,7 @@ test "delete as admin" do
     delete user_path(@other_user)
   end
  assert_redirected_to users_path
- 
+
  assert_no_difference 'User.count' do
    delete user_path(@user)
  end
