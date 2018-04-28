@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
+
+    resources :password_resets, only: [:new, :edit, :create, :update]
     resources :users
     resources :account_activations, only: [:edit]
+    
   get  '/signup' => 'users#new'
   post '/signup' => 'users#create'
 
