@@ -87,7 +87,7 @@ patch password_reset_path(@user.reset_token),
 assert_response :redirect
 follow_redirect!
 get edit_password_reset_path(@user.reset_token, email: @user.email)
-assert_redirected_to root_path
+assert_redirected_to root_path 
 end
 
 end

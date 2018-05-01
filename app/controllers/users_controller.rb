@@ -12,6 +12,7 @@ before_action :admin, only: [:destroy]
 
   def show
     @user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
     redirect_to root_path and return unless @user.activated?
   end
 
@@ -53,14 +54,6 @@ before_action :admin, only: [:destroy]
                                  :password_confirmation)
   end
 
-  #confirms a logged-in user
-  def logged_in_user
-    unless logged_in?
-      store_location
-      flash[:danger] = "Please log in!"
-      redirect_to login_url
-    end
-  end
   def correct_user
     @user = User.find(params[:id])
     redirect_to root_path if !current_user?(@user)
