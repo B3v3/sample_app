@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
-before_action :logged_in_user, only: [:edit, :update, :index, :delete]
+before_action :logged_in_user, only: [:edit, :update, :index, :delete, :following, :followers]
 before_action :correct_user, only: [:edit, :update]
 before_action :admin, only: [:destroy]
+
   def new
   @user = User.new
   end
@@ -46,6 +47,19 @@ before_action :admin, only: [:destroy]
      flash[:success] = "User deleted"
      redirect_to users_url
     end
+
+   def following
+     @title = "Following"
+     @user = User.find(params[:id])
+     @users = @user.following.paginate(page: params[:page])
+     render 'show_follow'
+   end
+
+   def followers
+     @title = "Followers"
+     @user = User.find(params[:id])
+     @users = @user.followers.paginate(page: params[:page])
+     render 'show_follow'
    end
 
   private
@@ -61,4 +75,5 @@ before_action :admin, only: [:destroy]
   def admin
     @user = User.find(params[:id])
     redirect_to root_path if not current_user.admin? && current_user != @user
+end
 end
